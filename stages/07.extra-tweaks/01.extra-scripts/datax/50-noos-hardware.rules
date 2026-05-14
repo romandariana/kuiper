@@ -1,0 +1,10 @@
+# no-OS Hardware Access Rules
+
+# SPI devices - for IMU communication
+SUBSYSTEM=="spidev", GROUP="spi", MODE="0660"
+
+# GPIO devices - for reset and data ready pins
+SUBSYSTEM=="gpio", GROUP="gpio", MODE="0660"
+
+# I2C devices (for future use)
+SUBSYSTEM=="i2c-dev", GROUP="i2c", MODE="0660"
