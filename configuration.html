@@ -8,8 +8,8 @@
 
     <title>Configuration &#8212; Kuiper  documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8e8a900e" />
-    <link rel="stylesheet" type="text/css" href="_static/app.min.css?v=833c9372" />
-    <script async="async" src="_static/app.umd.js?v=f78f54ff"></script>
+    <link rel="stylesheet" type="text/css" href="_static/app.min.css?v=ac863bf0" />
+    <script async="async" src="_static/app.umd.js?v=09b0c6bc"></script>
     <link rel="icon" href="_static/icon.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -112,6 +112,7 @@
 <li><a class="reference internal" href="#building-for-a-specific-adi-evaluation-board">Building for a specific ADI evaluation board</a></li>
 <li><a class="reference internal" href="#building-only-64-bit-boot-files">Building only 64-bit boot files</a></li>
 <li><a class="reference internal" href="#complete-development-environment-with-gnu-radio">Complete development environment with GNU Radio</a></li>
+<li><a class="reference internal" href="#building-images-for-multiple-devices">Building images for multiple devices</a></li>
 </ul>
 </li>
 </ul>
@@ -168,9 +169,9 @@ Content on this topic
 </p>
 
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="package-management.html">Package Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customization.html">Advanced Customization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="stage-reference.html">Stage Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="customization.html">Custom Script Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="repositories.html">Repositories</a></li>
 </ul>
 
 <p class="caption" role="heading">
@@ -233,9 +234,15 @@ this uses all available cores (<code class="docutils literal notranslate"><span 
 <td><p>Target architecture: <code class="docutils literal notranslate"><span class="pre">armhf</span></code> (32-bit) or <code class="docutils literal notranslate"><span class="pre">arm64</span></code> (64-bit)</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DEBIAN_VERSION</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">bookworm</span></code></p></td>
-<td><p>Debian version to use (e.g., <code class="docutils literal notranslate"><span class="pre">bookworm</span></code>, <code class="docutils literal notranslate"><span class="pre">bullseye</span></code>). Other
-versions may have missing functionalities or unsupported tools</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">trixie</span></code></p></td>
+<td><p>Debian version to use (e.g., <code class="docutils literal notranslate"><span class="pre">trixie</span></code>, <code class="docutils literal notranslate"><span class="pre">bookworm</span></code>, <code class="docutils literal notranslate"><span class="pre">bullseye</span></code>).
+Versions other than the default may have limited support</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">HOSTNAME</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">analog</span></code></p></td>
+<td><p>System hostname. Useful for identifying devices on a network, especially
+when running multiple boards. The hostname is used for SSH connections
+and network discovery (e.g., <code class="docutils literal notranslate"><span class="pre">analog.local</span></code> via mDNS/Avahi)</p></td>
 </tr>
 </tbody>
 </table>
@@ -294,7 +301,8 @@ images in parallel</p></td>
 <hr class="docutils" />
 <section id="adi-libraries-and-tools">
 <h2>ADI Libraries and Tools<a class="headerlink" href="#adi-libraries-and-tools" title="Link to this heading"></a></h2>
-<p>These options control which ADI libraries and tools are included in the image:</p>
+<p>These options control which ADI libraries and tools are included in the image.
+Libraries are installed from Analog Devices’ package repository.</p>
 <div class="table-wrapper bold-header docutils container">
 <table class="bold-header docutils align-default">
 <thead>
@@ -308,77 +316,25 @@ images in parallel</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">n</span></code></p></td>
 <td><p>Install Libiio library (<code class="docutils literal notranslate"><span class="pre">y</span></code>/<code class="docutils literal notranslate"><span class="pre">n</span></code>)</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CONFIG_LIBIIO_CMAKE_ARGS</span></code></p></td>
-<td><p><em>(see config file)</em></p></td>
-<td><p>CMake build arguments for Libiio</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BRANCH_LIBIIO</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">libiio-v0</span></code></p></td>
-<td><p>Git branch to use for Libiio</p></td>
-</tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CONFIG_PYADI</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">n</span></code></p></td>
 <td><p>Install Pyadi library (<code class="docutils literal notranslate"><span class="pre">y</span></code>/<code class="docutils literal notranslate"><span class="pre">n</span></code>). Requires Libiio</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BRANCH_PYADI</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">main</span></code></p></td>
-<td><p>Git branch to use for Pyadi</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CONFIG_LIBM2K</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CONFIG_LIBM2K</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">n</span></code></p></td>
 <td><p>Install Libm2k library (<code class="docutils literal notranslate"><span class="pre">y</span></code>/<code class="docutils literal notranslate"><span class="pre">n</span></code>). Requires Libiio</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CONFIG_LIBM2K_CMAKE_ARGS</span></code></p></td>
-<td><p><em>(see config file)</em></p></td>
-<td><p>CMake build arguments for Libm2k</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">BRANCH_LIBM2K</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">main</span></code></p></td>
-<td><p>Git branch to use for Libm2k</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CONFIG_LIBAD9166_IIO</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CONFIG_LIBAD9166_IIO</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">n</span></code></p></td>
 <td><p>Install Libad9166 library (<code class="docutils literal notranslate"><span class="pre">y</span></code>/<code class="docutils literal notranslate"><span class="pre">n</span></code>). Requires Libiio</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CONFIG_LIBAD9166_IIO_CMAKE_ARGS</span></code></p></td>
-<td><p><em>(see config file)</em></p></td>
-<td><p>CMake build arguments for Libad9166</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BRANCH_LIBAD9166_IIO</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">libad9166-iio-v0</span></code></p></td>
-<td><p>Git branch to use for Libad9166</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CONFIG_LIBAD9361_IIO</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CONFIG_LIBAD9361_IIO</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">n</span></code></p></td>
 <td><p>Install Libad9361 library (<code class="docutils literal notranslate"><span class="pre">y</span></code>/<code class="docutils literal notranslate"><span class="pre">n</span></code>). Requires Libiio</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CONFIG_LIBAD9361_IIO_CMAKE_ARGS</span></code></p></td>
-<td><p><em>(see config file)</em></p></td>
-<td><p>CMake build arguments for Libad9361</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">BRANCH_LIBAD9361_IIO</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">libad9361-iio-v0</span></code></p></td>
-<td><p>Git branch to use for Libad9361</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CONFIG_GRM2K</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CONFIG_GRM2K</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">n</span></code></p></td>
 <td><p>Install GRM2K (<code class="docutils literal notranslate"><span class="pre">y</span></code>/<code class="docutils literal notranslate"><span class="pre">n</span></code>). Requires Libiio, Libm2k, and Gnuradio</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CONFIG_GRM2K_CMAKE_ARGS</span></code></p></td>
-<td><p><em>(see config file)</em></p></td>
-<td><p>CMake build arguments for GRM2K</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BRANCH_GRM2K</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">main</span></code></p></td>
-<td><p>Git branch to use for GRM2K</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CONFIG_LINUX_SCRIPTS</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">n</span></code></p></td>
-<td><p>Install ADI Linux scripts (<code class="docutils literal notranslate"><span class="pre">y</span></code>/<code class="docutils literal notranslate"><span class="pre">n</span></code>)</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BRANCH_LINUX_SCRIPTS</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">kuiper2.0</span></code></p></td>
-<td><p>Git branch to use for Linux scripts</p></td>
 </tr>
 </tbody>
 </table>
@@ -402,51 +358,23 @@ images in parallel</p></td>
 <td><p>Install IIO Oscilloscope (<code class="docutils literal notranslate"><span class="pre">y</span></code>/<code class="docutils literal notranslate"><span class="pre">n</span></code>). Requires Libiio,
 Libad9166_IIO, and Libad9361_IIO</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CONFIG_IIO_OSCILLOSCOPE_CMAKE_ARGS</span></code></p></td>
-<td><p><em>(see config file)</em></p></td>
-<td><p>CMake build arguments for IIO Oscilloscope</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BRANCH_IIO_OSCILLOSCOPE</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">v0.18-main</span></code></p></td>
-<td><p>Git branch to use for IIO Oscilloscope</p></td>
-</tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CONFIG_IIO_FM_RADIO</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">n</span></code></p></td>
 <td><p>Install IIO FM Radio (<code class="docutils literal notranslate"><span class="pre">y</span></code>/<code class="docutils literal notranslate"><span class="pre">n</span></code>)</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BRANCH_IIO_FM_RADIO</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">main</span></code></p></td>
-<td><p>Git branch to use for IIO FM Radio</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CONFIG_FRU_TOOLS</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CONFIG_FRU_TOOLS</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">n</span></code></p></td>
 <td><p>Install FRU tools (<code class="docutils literal notranslate"><span class="pre">y</span></code>/<code class="docutils literal notranslate"><span class="pre">n</span></code>)</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BRANCH_FRU_TOOLS</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">main</span></code></p></td>
-<td><p>Git branch to use for FRU tools</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CONFIG_JESD_EYE_SCAN_GTK</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">n</span></code></p></td>
 <td><p>Install JESD Eye Scan GTK (<code class="docutils literal notranslate"><span class="pre">y</span></code>/<code class="docutils literal notranslate"><span class="pre">n</span></code>)</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CONFIG_JESD_EYE_SCAN_GTK_CMAKE_ARGS</span></code></p></td>
-<td><p><em>(see config file)</em></p></td>
-<td><p>CMake build arguments for JESD Eye Scan GTK</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">BRANCH_JESD_EYE_SCAN_GTK</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">main</span></code></p></td>
-<td><p>Git branch to use for JESD Eye Scan GTK</p></td>
-</tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CONFIG_COLORIMETER</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">n</span></code></p></td>
 <td><p>Install Colorimeter (<code class="docutils literal notranslate"><span class="pre">y</span></code>/<code class="docutils literal notranslate"><span class="pre">n</span></code>). Requires Libiio</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">BRANCH_COLORIMETER</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">main</span></code></p></td>
-<td><p>Git branch to use for Colorimeter</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CONFIG_SCOPY</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">CONFIG_SCOPY</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">n</span></code></p></td>
 <td><p>Install Scopy (<code class="docutils literal notranslate"><span class="pre">y</span></code>/<code class="docutils literal notranslate"><span class="pre">n</span></code>)</p></td>
 </tr>
@@ -612,7 +540,7 @@ python3-rpi.gpio), VideoCore debugging (vcdbg), sense-hat, and sense-emu</p></td
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">EXTRA_SCRIPT</span></code></p></td>
 <td><p><em>(empty)</em></p></td>
-<td><p>Path to a custom script inside the adi-kuiper-gen directory to run
+<td><p>Path to a custom script inside the kuiper directory to run
 during build for additional customization</p></td>
 </tr>
 </tbody>
@@ -678,6 +606,25 @@ during build for additional customization</p></td>
 </pre></div>
 </div>
 </div>
+</section>
+<section id="building-images-for-multiple-devices">
+<h3>Building images for multiple devices<a class="headerlink" href="#building-images-for-multiple-devices" title="Link to this heading"></a></h3>
+<p>When deploying multiple Kuiper boards on the same network, set unique hostnames
+to avoid conflicts:</p>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-number">Listing 7 </span><span class="caption-text">config file settings for first device</span><a class="headerlink" href="#id7" title="Link to this code"></a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">HOSTNAME</span><span class="o">=</span>pluto-sdr-lab-01
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-number">Listing 8 </span><span class="caption-text">config file settings for second device</span><a class="headerlink" href="#id8" title="Link to this code"></a></div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">HOSTNAME</span><span class="o">=</span>pluto-sdr-lab-02
+</pre></div>
+</div>
+</div>
+<p>This allows you to connect to specific devices via SSH using their hostname
+(e.g., <code class="docutils literal notranslate"><span class="pre">ssh</span> <span class="pre">analog&#64;pluto-sdr-lab-01.local</span></code>)</p>
 </section>
 </section>
 </section>
